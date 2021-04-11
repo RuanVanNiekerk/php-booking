@@ -1,0 +1,10 @@
+body{
+    background-image: url(../images/backgroundTrees.jpg);
+    background-size: 100%;
+    color: white;
+}
+.card-custom{
+    color: black;
+    background-color: white;
+    border: solid 10px #40E0D0;
+}
