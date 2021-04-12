@@ -5,68 +5,78 @@ $hotels = $_SESSION["hotels"];
 $days = date_diff($_SESSION["date1"],$_SESSION["date2"])->format("%a");
 $firstOption = $hotels[$_SESSION["selection"]];
 //assign values for compared hotel
-if(isset($_POST["compHotel"])){
-    $secondOption = $hotels[$_POST["compHotel"]];
-}
+$secondOption = $hotels[$_POST["compHotel"]];
+$_SESSION['secondOption'] = $secondOption;
 
-// Import PHPMailer classes into the global namespace
-// These must be at the top of your script, not inside a function
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
+function compareRate($choice){
+$hotels = $_SESSION["hotels"];
+$firstOption = $hotels[$_SESSION["selection"]];
+$secondOption = $hotels[$_POST["compHotel"]];
 
-// Load Composer's autoloader
-require 'vendor/autoload.php';
-
-// Instantiation and passing `true` enables exceptions
-$mail = new PHPMailer(true);
-
-try {
-    //Server settings
-    $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      // Enable verbose debug output
-    $mail->isSMTP();                                            // Send using SMTP
-    $mail->Host       = 'smtp.mailtrap.io';                     // Set the SMTP server to send through
-    $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-    $mail->Username   = '05b0611d206f40';                       // SMTP username
-    $mail->Password   = 'c207557c9562af';                       // SMTP password
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
-    $mail->Port       = 2525;                                   // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
-
-    //Recipients
-    $mail->setFrom('from@example.com', 'Mailer');
-    $mail->addAddress($_SESSION["email"], $_SESSION["firstName"]);     // Add a recipient
-    $mail->addReplyTo('info@example.com', 'Information');
-
-    
-    if(isset($_POST["book1"])){
-        $message = "Dear ".$_SESSION["firstName"]." ".$_SESSION["lastName"]."<br><br>"."The following booking details have been confirmed.<br>"
-                . "Location: ".$firstOption["name"]."<br>"
-                . "Duration: ".$days." days.<br>"
-                . "Price: ".$firstOption["rate"]*$days;
-
-        // Content
-        $mail->isHTML(true);                                  // Set email format to HTML
-        $mail->Subject = 'Booking Confirmation';
-        $mail->Body    = $message;
-
-        $mail->send();
-        echo 'Message has been sent';
-    }elseif(isset($_POST["book2"])){
-        $message = "Dear ".$_SESSION["firstName"]." ".$_SESSION["lastName"]."<br><br>"."The following booking details have been confirmed.<br>"
-                . "Location: ".$secondOption["name"]."<br>"
-                . "Duration: ".$days." days.<br>"
-                . "Price: ".$secondOption["rate"]*$days;
-        
-        // Content
-        $mail->isHTML(true);                                  // Set email format to HTML
-        $mail->Subject = 'Booking Confirmation';
-        $mail->Body    = $message;
-
-        $mail->send();
-        echo 'Message has been sent';
+    if($choice == 'first'){
+        if($secondOption["rate"]<$firstOption["rate"]&&!$secondOption["rate"]==NULL){
+            echo '<p style="color:red">Rate:'. $firstOption["rate"] .'</p>';
+        } elseif($secondOption["rate"]>$firstOption["rate"]) {
+            echo '<p style="color:green">Rate:'.$firstOption["rate"].'</p>';
+        }else{
+            echo '<p>Rate:'.$firstOption["rate"].'</p>';
+        }
+    }elseif($choice == 'second'){
+        if($secondOption["rate"]<$firstOption["rate"]&&!$secondOption["rate"]==NULL){
+            echo '<p style="color:green">Rate:'. $secondOption["rate"] .'</p>';
+        } elseif($secondOption["rate"]>$firstOption["rate"]) {
+            echo '<p style="color:red">Rate:'.$secondOption["rate"].'</p>';
+        }else{
+            echo '<p>Rate:'.$secondOption["rate"].'</p>';
+        }
     }
-} catch (Exception $e) {
-    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+}
+function compareFeatures($choice){
+$hotels = $_SESSION["hotels"];
+$firstOption = $hotels[$_SESSION["selection"]];
+$secondOption = $hotels[$_POST["compHotel"]];
+
+    if($choice == 'first'){
+        if(strlen($secondOption["features"])<strlen($firstOption["features"])&&!$secondOption["rate"]==NULL){
+            echo '<p style="color:green">Features:'. $firstOption["features"] .'</p>';
+        } elseif(strlen($secondOption["features"])>strlen($firstOption["features"])) {
+            echo '<p style="color:red">Features:'.$firstOption["features"].'</p>';
+        }else{
+            echo '<p>Features:'.$firstOption["features"].'</p>';
+        }
+    }elseif($choice == 'second'){
+        if(strlen($secondOption["features"])<strlen($firstOption["features"])&&!$secondOption["rate"]==NULL){
+            echo '<p style="color:red">Features:'. $firstOption["features"] .'</p>';
+        } elseif(strlen($secondOption["features"])>strlen($firstOption["features"])) {
+            echo '<p style="color:green">Features:'.$firstOption["features"].'</p>';
+        }else{
+            echo '<p>Features:'.$secondOption["features"].'</p>';
+        }
+    }
+}
+function comparePrice($choice){
+$hotels = $_SESSION["hotels"];
+$firstOption = $hotels[$_SESSION["selection"]];
+$secondOption = $hotels[$_POST["compHotel"]];
+$days = date_diff($_SESSION["date1"],$_SESSION["date2"])->format("%a");
+
+    if($choice == 'first'){
+        if($secondOption["rate"]*$days<$firstOption["rate"]*$days&&!$secondOption["rate"]*$days==NULL){
+            echo '<p style="color:red">Cost of Stay: R'. $firstOption["rate"]*$days .'</p>';
+        } elseif($secondOption["rate"]*$days>$firstOption["rate"]*$days) {
+            echo '<p style="color:green">Cost of Stay: R'.$firstOption["rate"]*$days.'</p>';
+        }else{
+            echo '<p>Cost of Stay: R'.$firstOption["rate"]*$days.'</p>';
+        }
+    }elseif($choice == 'second'){
+        if($secondOption["rate"]*$days<$firstOption["rate"]*$days&&!$secondOption["rate"]*$days==NULL){
+            echo '<p style="color:green">Cost of Stay: R'. $secondOption["rate"]*$days .'</p>';
+        } elseif($secondOption["rate"]*$days>$firstOption["rate"]*$days) {
+            echo '<p style="color:red">Cost of Stay: R'.$secondOption["rate"]*$days.'</p>';
+        }else{
+            echo '<p>Cost of Stay: R'.$secondOption["rate"]*$days.'</p>';
+        }
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -79,31 +89,37 @@ try {
     <link rel="stylesheet" href="css/styleSheet.css">
 </head>
 <body>
-    <div class="container">
+    <div class="container container-custom">
         <div class="row">
-            <h1>Hotel Comparison</h1>
+            <div class="col-12 mt-3 p-3 card-custom">
+                <h1>Lets Compare Some Options First</h1>
+            </div>            
         </div>  
         <div class="row">
-            <div class="col-6">
+            <div class="col-12 mt-3  p-0 pr-lg-2 col-lg-6">
                 <div class="card-custom h-100">
+                    <div class="card-header">
+                        <h3>Original Choice</h3>
+                    </div>
                     <div class="card-body">
                         <h3><?php echo $firstOption["name"]?></h3>
-                        <p>Rate:<?php echo $firstOption["rate"] ?></p>
-                        <p>Features:<?php echo $firstOption["features"] ?></p>
-                        <p>Cost of Stay: R<?php echo $firstOption["rate"]*$days?></p><!--Fix issue: always gets 0. sort out price calculation-->
+                        <?php compareRate("first")?>
+                        <?php compareFeatures("first")?>
+                        <?php compareprice("first")?>
                     </div>                    
                     <div class="card-footer">
-                        <form method="post">
+                        <form method="post" action="mail.php">
                             <input name="book1" type="submit" value="book">
                         </form>
                     </div>
                 </div>                
             </div>
-            <div class="col-6">
+            <div class="col-12 mt-3 p-0 pl-lg-2 col-lg-6">
                 <div class="card-custom h-100">
                     <div class="card-header">
                         <form id="comp" name="compare" method="post" action="">
                             <select name="compHotel" onchange="comp.submit()">
+                                <option selected disabled>Choose a Hotel</option>
                                 <option value="hotel1">Hotel 1</option>
                                 <option value="hotel2">Hotel 2</option>
                                 <option value="hotel3">Hotel 3</option>
@@ -113,12 +129,12 @@ try {
                     </div>
                     <div class="card-body">                        
                         <h3><?php echo $secondOption["name"]?></h3>
-                        <p>Rate:<?php echo $secondOption["rate"] ?></p>
-                        <p>Features:<?php echo $secondOption["features"] ?></p>
-                        <p>Cost of Stay: R<?php echo $secondOption["rate"]*$days?></p><!--Fix issue: always gets 0. sort out price calculation-->                        
+                        <?php compareRate("second")?>
+                        <?php compareFeatures("second")?>
+                        <?php compareprice("second")?>                        
                     </div>
                     <div class="card-footer">
-                        <form method="post">
+                        <form method="post" action="mail.php">
                             <input name="book2" type="submit" value="book">
                         </form>
                     </div>
