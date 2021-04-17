@@ -8,7 +8,9 @@ session_start();
     );
     $_SESSION["hotels"] = $hotels;
     
-    if(isset($_POST["hotel"])){
+    //saves the information from the form once it has been submitted
+    //returns a error message if dates are the same
+    if(isset($_POST["hotel"])&& $_POST["check_in"]!=$_POST["check_out"]){
         $_SESSION["selection"] = $_POST["hotel"];
         var_dump($_SESSION["selection"]);
         $_SESSION["date1"] = date_create($_POST["check_in"]);
@@ -19,6 +21,10 @@ session_start();
         $_SESSION["lastName"] = $_POST["last_name"];
         
         header('Location: booking.php');
+    }else{
+        echo '<script>';
+        echo 'alert("Your stay must be longer than 0 days.")';
+        echo '</script>';
     }
 ?>
 <!DOCTYPE html>
@@ -32,7 +38,7 @@ session_start();
     <link href="https://fonts.googleapis.com/css2?family=Halant&family=Nunito+Sans:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styleSheet.css">
 </head>
-<body>
+<body>    
     <div class="container-parent">
         <div class="flex-container">
             <form class="flex-col" method="post" action="#">

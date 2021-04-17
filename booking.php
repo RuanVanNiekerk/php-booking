@@ -8,6 +8,7 @@ $firstOption = $hotels[$_SESSION["selection"]];
 $secondOption = $hotels[$_POST["compHotel"]];
 $_SESSION['secondOption'] = $secondOption;
 
+//function that compares both rates and returns the value with a indicator(up or down arrow)
 function compareRate($choice){
 $hotels = $_SESSION["hotels"];
 $firstOption = $hotels[$_SESSION["selection"]];
@@ -35,6 +36,7 @@ $secondOption = $hotels[$_POST["compHotel"]];
         }        
     }
 }
+//function that compares both features and returns the value with a indicator(up or down arrow)
 function compareFeatures($choice){
 $hotels = $_SESSION["hotels"];
 $firstOption = $hotels[$_SESSION["selection"]];
@@ -63,6 +65,7 @@ $secondOption = $hotels[$_POST["compHotel"]];
         
     }
 }
+//function that compares both price and returns the value with a indicator(up or down arrow)
 function comparePrice($choice){
 $hotels = $_SESSION["hotels"];
 $firstOption = $hotels[$_SESSION["selection"]];
