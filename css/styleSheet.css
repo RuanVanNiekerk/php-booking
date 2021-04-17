@@ -1,6 +1,7 @@
 body{
     background-image: url(../images/backgroundTrees.jpg);
-    background-size: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
     font-family: 'Nunito Sans', sans-serif;
     font-size: 1.1em;
 }
@@ -11,6 +12,7 @@ h1,h2,h3{
 
 .input{
     width: 100%;
+    height: 2em;
 }
 
 #button{
@@ -19,14 +21,21 @@ h1,h2,h3{
     margin-top: 2em;
     background-color: #FFA500;
     border: none;
+    font-size: 1em;
+    color: white;
+    text-transform: uppercase;
 }
 #button:hover{
     background-color: white;
     transform: scale(1.1);
+    color: black;
 }
 
 .flex-container{
     display: flex;
+    width: 100%;
+    position: absolute;
+    padding: 2em 0;
 }
 .flex-col{
     background-color: rgb(21,134,117,0.9);
@@ -39,7 +48,11 @@ h1,h2,h3{
     margin-top: 2em;
 }
 
-@media screen and (max-width: 768px){
+@media only screen and (max-width: 768px){
+    body{
+        padding: 0;
+    }
+    
     .flex-col{
         max-width: 100vw;
     }
