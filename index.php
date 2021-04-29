@@ -64,9 +64,9 @@ session_start();
                 </div>
                 <div class="flex-item">
                     <label for="check_in">Check in Date</label>
-                    <input name="check_in" type="date" required>
+                    <input name="check_in" id="check_in" type="date" required><br/>
                     <label for="check_out">Check out Date</label>
-                    <input name="check_out" type="date" required><br/>
+                    <input name="check_out" id="check_out" type="date" required><br/>
                     <input id="button" type="submit">
                 </div>
             </form>
